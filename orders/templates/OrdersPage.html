@@ -1,0 +1,40 @@
+{% extends 'MainPage/base.html' %}
+
+{% block navbar %}
+<header>
+        <nav>
+            <div class="row">
+                <li class="current-selection"><a id="selection" href="#">Current Orders</a></li>
+                <ul class='main-nav'>
+                    
+                    <li class="coolBeans"><a  id="cube" href="/auth/billing/">Billings</a></li>
+                    <li class="coolBeans"><a id="cube" href="/food/menu/">Menus</a></li>
+                    <li class="coolBeans"><a  id="cube" href="/restaurant/tables">Tables</a></li>
+                    <li class="coolBeans"><a  id="cube" href="/auth/history">History</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+{% endblock %}
+
+
+{% block section-content %}
+    <div class="wrap-section clearfix" >     
+           <table>
+              <tr>
+                <th>TABLE NO.</th>
+                <th>MENU ITEM</th>
+                <th>QUANTITY</th>
+              </tr>
+              
+              {% for items in order_items %}
+                <tr>
+                    <td>{{ items.order.table_no.table_no }}</td>
+                    <td>{{ items.fooditem }}</td>
+                    <td>{{ items.quantity }}</td>
+                </tr>
+              {% endfor %}
+                
+            </table>
+        </div>
+{% endblock section-content %}
