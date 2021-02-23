@@ -17,7 +17,7 @@ class UserProfileManager(BaseUserManager):
         # normailize second half of email to lower case as it's not case sensitve
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
-
+        
         user.set_password(password)
         user.save(using=self._db)
 
