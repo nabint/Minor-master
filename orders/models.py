@@ -17,4 +17,4 @@ class OrderItem(models.Model):
     fooditem = models.ForeignKey(FoodItem,verbose_name="FOOD",on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True,blank=True)
     def __str__(self):
-        return str(self.order)
+        return str(self.fooditem)

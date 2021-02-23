@@ -16,13 +16,18 @@ from django.contrib.auth.decorators import login_required
 
 
 from django.contrib import messages #for displaying messages like save complete
+from django.http import HttpResponse
+
+
+base_url = '127.0.0.1:8000'
+
 
 # Create your views here.
 def login_view(request):
     if(request.method == 'POST'):
         try:
             parameters = {"username":request.POST['email'],"password":request.POST['pass']}
-            r = requests.post('http://127.0.0.1:8000/auth/token/',data=parameters)
+            r = requests.post('http://' +base_url+  '/auth/token/',data=parameters)
             print(r)
             if(r.status_code == 200):
                 validate_email(request.POST['email'])
@@ -70,6 +75,10 @@ def signup_view(request):
 
     return render(request, template, context)
 
+
+
+
+
 @login_required(login_url='/auth/')
 def home_view(request):
     permission_classes = [IsAuthenticated] 
@@ -100,3 +109,44 @@ def tables_view(request):
 def history_view(request):
     template = "MainPage/history.html"
     return render(request,template,{})
+
+@csrf_exempt
+def customer_signup(request):
+    if(request.method == "POST"):
+        try :
+            validate_email(request.POST['email'])
+            customer = UserProfile.objects.create_customer(email=request.POST['email'],name =request.POST['name'],password=request.POST['password'])
+            print("Customer Is created" + customer.name)
+            return HttpResponse("Your response")
+        except ValidationError as e:
+            print("Error occured")
+            return
+
+
+def customer_login(request):
+    if(request.method == 'POST'):
+        try:
+            parameters = {"username":request.POST['email'],"password":request.POST['pass']}
+            r = requests.post('http://' +base_url+  '/auth/token/',data=parameters)
+            print(r)
+            if(r.status_code == 200):
+                validate_email(request.POST['email'])
+                request.session['token'] = r.json()['token']
+                print(r.json())
+                print('Navigating to nexxxt page')
+                username = request.POST['email']
+                password = request.POST['pass']
+                #user = authenticate(request, username=username, password=password)#should authenticate first before logging in
+                user = Token.objects.get(key=r.json()['token']).user
+                print(user)
+                if(user is not None):
+                    print('Not None')
+                    login(request,user)
+                    messages.success(request, 'Successfully Logged In!')
+                return HttpResponse("Logged IN")
+                
+            else:
+                print('BAD RREquest')
+        except ValidationError as e:
+            print("bad email, details:",e)
+    return HttpResponse("Not Logged IN")

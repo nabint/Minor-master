@@ -25,7 +25,9 @@ SECRET_KEY = '42%3a*s=%f)-afi%ru4pqckd5g%!3_=h3to-l&mt^m6lhlyg0i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 STATICFILES_DIRS = [
@@ -129,8 +131,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
 
 
-AUTH_USER_MODEL = 'users.UserProfile'#makes userprofile as a default authetication and userregistration in this model
+AUTH_USER_MODEL = 'users.UserProfile' #makes userprofile as a default authetication and userregistration in this model
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

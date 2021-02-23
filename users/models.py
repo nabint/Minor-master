@@ -17,11 +17,22 @@ class UserProfileManager(BaseUserManager):
         # normailize second half of email to lower case as it's not case sensitve
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
-        
+
         user.set_password(password)
         user.save(using=self._db)
 
         return user
+
+    def create_customer(self,email,password,name="",is_restaurant=False):
+        if not email:
+            raise ValueError("Customer must have an email address")
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email,name = name, is_restaurant=is_restaurant)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
 
     def create_superuser(self, email, password):
         """Create and save a new superuser with given details"""
@@ -42,6 +53,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_restaurant = models.BooleanField(default=True)
+
 
     objects = UserProfileManager()
 

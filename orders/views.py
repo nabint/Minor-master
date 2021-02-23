@@ -4,11 +4,19 @@ from rest_framework.response import Response
 from orders import serializers,models
 from fooditem.models import FoodItem
 from fooditem.serializers import FoodItemSerializers
+from restaurant.serializers import TableSerializer
 import json
 import requests
 from orders.models import OrderItem,Order
 from django.http import JsonResponse
 from restaurant.models import Restaurant, Table
+
+from django.views.decorators.csrf import csrf_exempt,ensure_csrf_cookie
+
+
+
+
+
 # Create your views here.
 class OrderView(APIView):
     serializer_class = serializers.OrderSerializers
@@ -41,23 +49,31 @@ class OrderView(APIView):
         table_order.delete()
         return Response({"message": "Order with table No `{}` has been deleted.".format(pk)},status=204)
 
+
+
+
 class OrderItemView(APIView):
     serializer_class = serializers.OrderItemSerializers
     def post(self,request,pk=None,format=None):
-        print('aa')
-        check_ob = Order.objects.filter(table_no=request.data['tableno']).count()
+        table_qs = Table.objects.filter(table_no = request.data['tableno'])
+        table = list(table_qs)[0]
+        # print(table)
+        check_ob = Order.objects.filter(table_no=table).count()
         if(check_ob <=0 ):
-            new_order = Order(table_no=request.data['tableno'])
+            
+            new_order = Order(table_no=table)
             new_order.save()
-        order = Order.objects.get(table_no=request.data['tableno'])
-        print('bb')
+        
+        order_qs = Order.objects.filter(table_no = table)
+        order = list(order_qs)[0]
         print(order)
-        check_oi = OrderItem.objects.filter(order=order).count()
-        orderi = OrderItem(order=order,quantity=request.data['quantity'])
-        orderi.save()
         food = FoodItem.objects.get(name=request.data['name'])
-        print(orderi.fooditem)
-        orderi.fooditem.add(food) 
+        print(food)
+        orderi = OrderItem(order=order,fooditem=food,quantity=request.data['quantity'])
+        
+        orderi.save()
+        
+        
         return Response('Success')
     
     

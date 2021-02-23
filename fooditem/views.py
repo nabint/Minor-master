@@ -12,7 +12,7 @@ class FoodItemView(APIView):
 
     def get(self,request,format = None):
         
-        qs = FoodItem.objects.filter(menu_id=request.data['menu_id'])
+        qs = FoodItem.objects.filter(menu_id=request.GET['menu_id'])
         # menu_qs = Menu.objects.filter(menu_id=)
         res_qs = Restaurant.objects.filter()
         # qs = FoodItem.objects.all()
