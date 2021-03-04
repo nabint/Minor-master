@@ -10,7 +10,6 @@ import requests
 from orders.models import OrderItem,Order
 from django.http import JsonResponse
 from restaurant.models import Restaurant, Table
-
 from django.views.decorators.csrf import csrf_exempt,ensure_csrf_cookie
 
 

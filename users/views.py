@@ -19,7 +19,7 @@ from django.contrib import messages #for displaying messages like save complete
 from django.http import HttpResponse
 
 
-base_url = '127.0.0.1:8000'
+base_url = '192.168.43.110:8000'
 
 
 # Create your views here.
