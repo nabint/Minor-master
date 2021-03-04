@@ -28,7 +28,7 @@ class OrderItem(models.Model):
 
     status = models.CharField(
         max_length=30,
-        default = status_1,
+        default = status_2,
         choices = status_choices)
 
 
