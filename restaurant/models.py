@@ -34,7 +34,7 @@ class Table(models.Model):
     restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE)
     def __str__(self):
         """Return string representation of our user"""
-        return self.restaurant.restaurant_name + ' - Table :' + str(self.table_id)
+        return self.restaurant.restaurant_name + ' - Table :' + str(self.table_id)+ ' Table No:'+str(self.table_no)
 
         
 def generateMenu(sender,instance,created,*args,**kwargs):

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from orders import serializers,models
 from fooditem.models import FoodItem
 from fooditem.serializers import FoodItemSerializers
+from .serializers import OrderItemSerializers, OrderSItemSerializers
 from restaurant.serializers import TableSerializer
 import json
 import requests
@@ -72,7 +73,6 @@ class OrderItemView(APIView):
         
         orderi.save()
         
-        
         return Response('Success')
     
     
@@ -81,6 +81,23 @@ class OrderItemView(APIView):
         order_item = get_object_or_404(OrderItem.objects.all(), pk=pk)
         order_item.delete()
         return Response({"message": "OrderItem with id `{}` has been deleted.".format(pk)},status=204)
+
+    def get(self, request, pk = None):
+        o = []
+        try:
+            table_qs = Table.objects.filter(table_no = request.GET['tableno'])
+            table = list(table_qs)[0]
+            check_ob = Order.objects.filter(table_no=table).count()
+            if(check_ob >0 ):
+                order_qs = Order.objects.filter(table_no = table)
+                order = list(order_qs)[0]
+                orders = OrderItem.objects.filter(order=order)
+                serializer = OrderSItemSerializers(orders,many=True,context={"request":request})
+                food_item = {'orders':serializer.data}
+                return Response(food_item)
+            return Response({'orders':o})
+        except:
+            return Response({'orders':o})
 
 def order_view(request):
     restaurant = Restaurant.objects.filter(restaurant_name=request.user.name)

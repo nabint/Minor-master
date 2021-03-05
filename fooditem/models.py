@@ -12,3 +12,4 @@ class FoodItem(models.Model):
     def __str__(self):
         """Return string representation of our user"""
         return self.name
+        

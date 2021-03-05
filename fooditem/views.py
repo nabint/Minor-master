@@ -12,15 +12,27 @@ class FoodItemView(APIView):
 
     def get(self,request,format = None):
         
-        qs = FoodItem.objects.filter(menu_id=request.GET['menu_id'])
-        # menu_qs = Menu.objects.filter(menu_id=)
-        res_qs = Restaurant.objects.filter()
-        # qs = FoodItem.objects.all()
-        res_serializer = res_serializers.RestaurantSerializer(qs[0].menu_id.restaurant,context={"request":request})
-        print(res_serializer.data)
-        serializer = serializers.FoodItemSerializers(qs,many=True,context={"request":request})
-        food_item = {'food':serializer.data,'restaurant':res_serializer.data,}
-        return Response(food_item)
+        try:
+            query = menu_id=request.GET['query']
+            qs = FoodItem.objects.filter(menu_id=request.GET['menu_id'], name__icontains=query)
+            # menu_qs = Menu.objects.filter(menu_id=)
+            res_qs = Restaurant.objects.filter()
+            # qs = FoodItem.objects.all()
+            res_serializer = res_serializers.RestaurantSerializer(qs[0].menu_id.restaurant,context={"request":request})
+            print(res_serializer.data)
+            serializer = serializers.FoodItemSerializers(qs,many=True,context={"request":request})
+            food_item = {'food':serializer.data,'restaurant':res_serializer.data,}
+            return Response(food_item)
+        except:
+            qs = FoodItem.objects.filter(menu_id=request.GET['menu_id'])
+            # menu_qs = Menu.objects.filter(menu_id=)
+            res_qs = Restaurant.objects.filter()
+            # qs = FoodItem.objects.all()
+            res_serializer = res_serializers.RestaurantSerializer(qs[0].menu_id.restaurant,context={"request":request})
+            print(res_serializer.data)
+            serializer = serializers.FoodItemSerializers(qs,many=True,context={"request":request})
+            food_item = {'food':serializer.data,'restaurant':res_serializer.data,}
+            return Response(food_item)
 
     def post(self,request):
         serializer = self.serializers_class(data=request.data)
@@ -36,6 +48,8 @@ class FoodItemView(APIView):
         food_item = get_object_or_404(FoodItem.objects.all(),pk=pk)
         food_item.delete()
         return Response({"message": "FoodItem with id `{}` has been deleted.".format(pk)},status=204)
+
+        
 
 def menu_view(request):
     restaurant = Restaurant.objects.filter(restaurant_name=request.user.name)

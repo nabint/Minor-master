@@ -10,3 +10,9 @@ class OrderItemSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.OrderItem
         fields = '__all__'
+
+class OrderSItemSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.OrderItem
+        fields = '__all__'
+        depth = 1
