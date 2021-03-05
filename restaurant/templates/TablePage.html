@@ -1,0 +1,41 @@
+{% extends 'MainPage/base.html' %}
+{% load static %}
+{% block navbar %}
+    <header>
+        <nav>
+            <div class="row">
+                <h3 class="current-selection"><a id="selection" href="#">Tables</a></h3>
+                <ul class='main-nav'>
+                    
+                    <li class="coolBeans"><a  id="cube" href="/orders/currentorders/">Curent Orders</a></li>
+                    <li class="coolBeans"><a  id="cube" href="/auth/billing">Billings</a></li>
+                    <li class="coolBeans"><a  id="cube" href="/food/menu/">Menus</a></li>
+                    <li class="coolBeans"><a  id="cube"  href="/auth/history">History</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+{% endblock navbar%}
+
+{% block section-content %}   
+    <div class="wrap-section clearfix" >     
+        {% for table in tables %}
+        <div class="card">
+            <img src="{% static 'images/table.jpg'%}" alt="Avatar" style="width:100%">
+            <div class="container">
+                <h4>{{table.table_no}}</h4> 
+            </div>
+        </div>
+        {% endfor %}
+        <div id="container-button">
+            <button class="learn-more">
+                <span class="circle" aria-hidden="true">
+                <span class="icon arrow"></span>
+                </span>
+                <span class="button-text">Add Tables</span>
+            </button>
+        </div>
+    </div>
+    
+    
+{% endblock section-content %}
