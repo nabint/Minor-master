@@ -49,6 +49,7 @@ def login_view(request):
                 print('BAD RREquest')
         except ValidationError as e:
             print("bad email, details:",e)
+            
     context = {}
     template = "Login/index.html"
     return render(request, template, context)
