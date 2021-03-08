@@ -26,7 +26,7 @@ class Menu(models.Model):
     restaurant = models.OneToOneField(Restaurant,on_delete=models.CASCADE)
     def __str__(self):
         """Return string representation of our user"""
-        return 'Menu of ' + self.restaurant.restaurant_name+ str(self.menu_id)
+        return 'Menu of ' + self.restaurant.restaurant_name+ " "+str(self.menu_id)
 
 class Table(models.Model):
     table_id = models.AutoField(primary_key=True,)

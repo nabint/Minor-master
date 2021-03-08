@@ -102,9 +102,15 @@ class OrderItemView(APIView):
 def order_view(request):
     restaurant = Restaurant.objects.filter(restaurant_name=request.user.name)
     tables = Table.objects.filter(restaurant=restaurant[0])
+    print(tables)
+    print("________")
     order_items = []
     for table in tables:
+        print(table)
+        print("________")
         order = Order.objects.filter(table_no=table)
+        print("------------")
+        print(order)
         if order.exists():
             order_item = OrderItem.objects.filter(order=order[0].order_id)
             print(order_item)
